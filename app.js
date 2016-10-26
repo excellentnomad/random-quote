@@ -9,19 +9,30 @@
     constructor: function() {
       this.quotes = sampleQuotes;
     },
-    getRandomQuotes: function(){
+    getRandomQuote: function(){
       var randomIndex = Math.floor(Math.random() * sampleQuotes.length);
       return sampleQuotes[randomIndex];
     }
 
   });
+
+  var MockQuoteService = Class({
+    constructor: function() {},
+    getRandomQuote: function() {
+      return {
+        line: 'A mock quote.',
+        author: 'Mock Author'
+      }
+    }
+  })
+
   var RandomQuoteComponent = Component({
     selector: 'random-quote',
     template: '<p><em>{{quote.line}}</em> - {{quote.author}}</p>'
   })
   .Class({
     constructor: [QuoteService, function RandomQuoteComponent(quoteService) {
-      this.quote = quoteService.getRandomQuotes();
+      this.quote = quoteService.getRandomQuote();
     }]
   });
 
@@ -39,6 +50,11 @@
     imports: [BrowserModule],
     declarations: [AppComponent, RandomQuoteComponent],
     providers: [QuoteService],
+    // The following code can also be used inside providers array:
+    //{provide: QuoteService, useClass: MockQuoteService}
+    //useValue: new MockQuoteService
+    //useFactory: function() {
+    //  return new MockQuoteService(); }
     bootstrap: [AppComponent]
   })
   .Class({
