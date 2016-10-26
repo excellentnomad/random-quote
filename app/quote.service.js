@@ -1,11 +1,7 @@
-(function() {
+(function(app) {
   var Class = ng.core.Class;
-  var Component = ng.core.Component;
-  var NgModule = ng.core.NgModule;
-  var BrowserModule = ng.platformBrowser.BrowserModule;
-  var platformBrowserDynamic = ng.platformBrowserDynamic.platformBrowserDynamic;
 
-  var QuoteService = new Class({
+  app.QuoteService = new Class({
     constructor: function() {
       this.quotes = sampleQuotes;
     },
@@ -20,48 +16,7 @@
         callback(self.getRandomQuote());
       }, delay);
     }
-
   });
-
-  var RandomQuoteComponent = Component({
-    selector: 'random-quote',
-    template: '<p><em>{{quote.line}}</em> - {{quote.author}}</p>'
-  })
-  .Class({
-    constructor: [QuoteService, function RandomQuoteComponent(quoteService) {
-      var self = this;
-      quoteService.generateRandomQuote(2000, function(quote){
-        self.quote = quote;
-      });
-    }]
-  });
-
-  var AppComponent = Component({
-    selector: 'my-app',
-    template:
-      '<h1>Random Quote</h1>' +
-      '<random-quote></random-quote>'
-  })
-  .Class({
-    constructor: function() { }
-  });
-
-  var AppModule = NgModule({
-    imports: [BrowserModule],
-    declarations: [AppComponent, RandomQuoteComponent],
-    providers: [QuoteService],
-    // The following code can also be used inside providers array:
-    //{provide: QuoteService, useClass: MockQuoteService}
-    //useValue: new MockQuoteService
-    //useFactory: function() {
-    //  return new MockQuoteService(); }
-    bootstrap: [AppComponent]
-  })
-  .Class({
-    constructor: function() { }
-  });
-
-  platformBrowserDynamic().bootstrapModule(AppModule);
 
   var sampleQuotes = [
     {
@@ -106,4 +61,4 @@
     }
   ];
 
-})();
+})(window.app || (window.app = {}));
