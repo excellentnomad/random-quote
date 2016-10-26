@@ -1,17 +1,28 @@
 (function() {
+  var Class = ng.core.Class;
   var Component = ng.core.Component;
   var NgModule = ng.core.NgModule;
   var BrowserModule = ng.platformBrowser.BrowserModule;
   var platformBrowserDynamic = ng.platformBrowserDynamic.platformBrowserDynamic;
 
+  var QuoteService = new Class({
+    constructor: function() {
+      this.quotes = sampleQuotes;
+    },
+    getRandomQuotes: function(){
+      var randomIndex = Math.floor(Math.random() * sampleQuotes.length);
+      return sampleQuotes[randomIndex];
+    }
+
+  });
   var RandomQuoteComponent = Component({
     selector: 'random-quote',
     template: '<p><em>{{quote.line}}</em> - {{quote.author}}</p>'
   })
   .Class({
     constructor: function() {
-      var randomIndex = Math.floor(Math.random() * quotes.length);
-      this.quote = quotes[randomIndex];
+      var quoteService = new QuoteService();
+      this.quote = quoteService.getRandomQuotes();
     }
   });
 
@@ -36,7 +47,7 @@
 
   platformBrowserDynamic().bootstrapModule(AppModule);
 
-  var quotes = [
+  var sampleQuotes = [
     {
       "line": "Debugging is twice as hard as writing the code in the first place. Therefore, if you write the code as cleverly as possible, you are, by definition, not smart enough to debug it.",
       "author": "Brian W. Kernighan"
