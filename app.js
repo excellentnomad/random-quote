@@ -12,19 +12,16 @@
     getRandomQuote: function(){
       var randomIndex = Math.floor(Math.random() * sampleQuotes.length);
       return sampleQuotes[randomIndex];
+    },
+    generateRandomQuote: function(delay, callback) {
+      var self = this;
+      callback(this.getRandomQuote());
+      setTimeout(function() {
+        callback(self.getRandomQuote());
+      }, delay);
     }
 
   });
-
-  var MockQuoteService = Class({
-    constructor: function() {},
-    getRandomQuote: function() {
-      return {
-        line: 'A mock quote.',
-        author: 'Mock Author'
-      }
-    }
-  })
 
   var RandomQuoteComponent = Component({
     selector: 'random-quote',
@@ -32,7 +29,10 @@
   })
   .Class({
     constructor: [QuoteService, function RandomQuoteComponent(quoteService) {
-      this.quote = quoteService.getRandomQuote();
+      var self = this;
+      quoteService.generateRandomQuote(2000, function(quote){
+        self.quote = quote;
+      });
     }]
   });
 
